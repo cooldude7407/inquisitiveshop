@@ -1,5 +1,5 @@
-import { prefix as _prefix } from "./botconfig.json";
-import { Client, Collection } from "discord.js";
+const botconfig = require("./botconfig.json");
+const Discord = require("discord.js");
 const client = new Client();
 const bot = new Client({
   disableEveryone: true
