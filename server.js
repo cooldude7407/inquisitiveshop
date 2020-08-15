@@ -1,12 +1,12 @@
-const botconfig = require("./botconfig.json");
-const Discord = require("discord.js");
-const client = new Discord.Client();
-const bot = new Discord.Client({
+import { prefix as _prefix } from "./botconfig.json";
+import { Client, Collection } from "discord.js";
+const client = new Client();
+const bot = new Client({
   disableEveryone: true
 });
-const fs = require("fs");
-bot.commands = new Discord.Collection();
-fs.readdir("./Commands/", (err, files) => {
+import { readdir, readFileSync } from "fs";
+bot.commands = new Collection();
+readdir("./Commands/", (err, files) => {
   if (err) console.log(err);
   let jsfile = files.filter(f => f.split(".").pop() === "js");
   if (jsfile.length <= 0) {
@@ -31,11 +31,11 @@ bot.on("message", async message => {
   if (message.author.bot) return;
   if (message.channel.type === "dm") return;
 
-  let prefixes = JSON.parse(fs.readFileSync("./prefixes.json", "utf8"));
+  let prefixes = JSON.parse(readFileSync("./prefixes.json", "utf8"));
 
   if (!prefixes[message.guild.id]) {
     prefixes[message.guild.id] = {
-      prefixes: botconfig.prefix
+      prefixes: _prefix
     };
   }
 
@@ -48,4 +48,4 @@ bot.on("message", async message => {
   if (commandfile) commandfile.run(bot, message, args);
 });
 
-bot.login(botconfig.token);
+bot.login(process.env.token);
